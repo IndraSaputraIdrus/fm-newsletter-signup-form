@@ -17,6 +17,13 @@
   font-display: swap;
 }
 
+@theme {
+  --color-primary: hsl(4, 100%, 67%);
+  --color-neutral-grey-100: hsl(231, 7%, 60%); 
+  --color-neutral-grey-200: hsl(235, 18%, 26%);
+  --color-neutral-grey-300: hsl(234, 29%, 20%);
+}
+
 body {
   font-family: "Roboto", sans-serif;
 }
