@@ -11,7 +11,8 @@
 
 <style>
 	:global(html, body) {
-		max-width: 100%;
-		min-height: 100dvh;
+		width: 100%;
+		height: 100dvh;
+    background-color: var(--color-neutral-grey-300);
 	}
 </style>

@@ -1,9 +1,15 @@
 <script lang="ts">
 	import HeroImageInMobile from '$lib/images/illustration-sign-up-mobile.svg';
+	import Button from './button.svelte';
 	import CheckmarkIcon from './checkmark-icon.svelte';
+
+  const handleSubmit = (e: SubmitEvent) => {
+    e.preventDefault()
+  }
+
 </script>
 
-<div class="bg-white sm:max-w-md">
+<div class="min-h-full bg-white sm:max-w-md">
 	<div>
 		<img src={HeroImageInMobile} alt="hero" class="block w-full object-cover" />
 	</div>
@@ -30,7 +36,7 @@
 			</li>
 		</ul>
 
-		<form class="flex flex-col gap-6">
+		<form onsubmit={handleSubmit} class="flex flex-col gap-6">
 			<label class="flex flex-col gap-2">
 				<span class="text-xs font-bold">Email address</span>
 				<input
@@ -39,9 +45,7 @@
 					placeholder="email@company.com"
 				/>
 			</label>
-			<button class="font-bold text-sm bg-neutral-grey-300 rounded-lg px-4 py-3 text-center text-white"
-				>Subscribe to monthly newsletter</button
-			>
+			<Button>Subscribe to monthly newsletter</Button>
 		</form>
 	</div>
 </div>
