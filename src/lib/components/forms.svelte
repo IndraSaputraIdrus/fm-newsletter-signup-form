@@ -2,11 +2,34 @@
 	import HeroImageInMobile from '$lib/images/illustration-sign-up-mobile.svg';
 	import Button from './button.svelte';
 	import CheckmarkIcon from './checkmark-icon.svelte';
+	import { z } from 'zod';
 
-  const handleSubmit = (e: SubmitEvent) => {
-    e.preventDefault()
-  }
+	const formSchema = z.object({
+		email: z
+			.string()
+			.trim()
+			.min(1, { message: 'Email is required' })
+			.email({ message: 'Valid email required' })
+	});
 
+	let error: Record<string, string | undefined> = $state({});
+	let email = $state('');
+
+	const handleSubmit = (e: SubmitEvent) => {
+		e.preventDefault();
+	};
+
+	const getEmail = () => email;
+
+	const setEmail = (value: string) => {
+		error.email = undefined;
+		const form = formSchema.safeParse({ email: value });
+		if (!form.success) {
+			const errors = form.error.flatten().fieldErrors;
+			error.email = errors.email?.[0];
+		}
+		email = value;
+	};
 </script>
 
 <div class="min-h-full bg-white sm:max-w-md">
@@ -38,9 +61,20 @@
 
 		<form onsubmit={handleSubmit} class="flex flex-col gap-6">
 			<label class="flex flex-col gap-2">
-				<span class="text-xs font-bold">Email address</span>
+				<div class="flex items-center justify-between text-xs font-bold">
+					<span>Email address</span>
+					{#if error.email}
+						<span class="text-primary">{error.email}</span>
+					{/if}
+				</div>
 				<input
-					class="placeholder:text-neutral-grey-100 border-neutral-grey-100 rounded-lg border px-4 py-3"
+					bind:value={getEmail, setEmail}
+					class={[
+						'rounded-lg border px-4 py-3',
+            error.email ? 'bg-red-200' : 'bg-white',
+						error.email ? 'placeholder:text-red-500' : 'placeholder:text-neutral-grey-100',
+						error.email ? 'border-red-500' : 'border-neutral-grey-100'
+					]}
 					type="text"
 					placeholder="email@company.com"
 				/>

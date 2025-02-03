@@ -27,6 +27,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
-		"prettier-plugin-tailwindcss": "^0.6.11"
+		"prettier-plugin-tailwindcss": "^0.6.11",
+		"zod": "^3.24.1"
 	}
 }
