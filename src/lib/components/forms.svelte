@@ -1,8 +1,20 @@
 <script lang="ts">
 	import HeroImageInMobile from '$lib/images/illustration-sign-up-mobile.svg';
+	import { appStore } from '$lib/store.svelte';
 	import Button from './button.svelte';
 	import CheckmarkIcon from './checkmark-icon.svelte';
 	import { z } from 'zod';
+
+  const validateForm = (value: string) => {
+		error.email = undefined;
+		const form = formSchema.safeParse({ email: value });
+		if (!form.success) {
+			const errors = form.error.flatten().fieldErrors;
+			error.email = errors.email?.[0];
+		}
+		appStore.email = value;
+    return form.success
+  }
 
 	const formSchema = z.object({
 		email: z
@@ -13,22 +25,24 @@
 	});
 
 	let error: Record<string, string | undefined> = $state({});
-	let email = $state('');
 
 	const handleSubmit = (e: SubmitEvent) => {
 		e.preventDefault();
+    const target = e.target as HTMLFormElement
+    const formData = new FormData(target)
+    const success = validateForm(formData.get("email")! as string)
+
+    if(success) {
+      appStore.status = "success"
+    } else {
+      appStore.status = "default"
+    }
 	};
 
-	const getEmail = () => email;
+	const getEmail = () => appStore.email;
 
 	const setEmail = (value: string) => {
-		error.email = undefined;
-		const form = formSchema.safeParse({ email: value });
-		if (!form.success) {
-			const errors = form.error.flatten().fieldErrors;
-			error.email = errors.email?.[0];
-		}
-		email = value;
+    validateForm(value)
 	};
 </script>
 
@@ -69,6 +83,7 @@
 				</div>
 				<input
 					bind:value={getEmail, setEmail}
+          name="email"
 					class={[
 						'rounded-lg border px-4 py-3',
             error.email ? 'bg-red-200' : 'bg-white',
