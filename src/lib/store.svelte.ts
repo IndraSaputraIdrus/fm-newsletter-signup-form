@@ -1,4 +1,4 @@
 export const appStore = $state({
   email: "",
-  status: "success"
+  status: "default"
 })
